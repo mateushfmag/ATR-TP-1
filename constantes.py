@@ -5,7 +5,7 @@ global V  # Tensao de armadura (entrada)
 global Ra # Resistencia do circuito de armadura
 global La # Indutancia de armadura
 global Ia # Corrente de armadura
-global Km # Constante de torque do motor
+global Km # Constante de torque Tmotor
 global Tl # Torque de carga (perturbacao)
 global Jm # Momento de inercia do motor
 global B  # Atrito viscoso do motor

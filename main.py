@@ -1,11 +1,7 @@
 import threading
 import motor
 import constantes
-
-
-def logica_controle():
-    for i in range(1):
-        print('OLA EU SOU O CONTROLADOR')
+import controlador
 
 
 if __name__ == '__main__':
@@ -13,5 +9,5 @@ if __name__ == '__main__':
     for id in range(constantes.NUM_MOTORES):
         motor_thread = threading.Thread(target=motor.logica, args=[id])
         motor_thread.start()
-    controle_thread = threading.Thread(target=logica_controle)
+    controle_thread = threading.Thread(target=controlador.logica)
     controle_thread.start()
