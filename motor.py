@@ -1,4 +1,21 @@
 import constantes
+import time
+
+dT = 1
+
+def torque_motor_fn(i):
+    return constantes.Km*constantes.Ia
+
+def tensao_fn(i):
+    return constantes.V
+
+def velocidade_fn(i):
+    termo_1 = constantes.La*( torque_motor_fn(i+1) - torque_motor_fn(i) )/dT
+    termo_2 = constantes.Km*tensao_fn(i)
+    termo_3 = constantes.Km*constantes.Kb
+    termo_4 = constantes.Ra*torque_motor_fn(i)
+    velocidade = (termo_2 - termo_1 - termo_4)/termo_3
+    return velocidade
 
 def liga_desliga(id, liga):
     if liga:
@@ -7,10 +24,10 @@ def liga_desliga(id, liga):
         id_anterior = id-1
         constantes.mutex.acquire()
         pode_ativar = id_anterior not in constantes.MOTORES_ATIVOS and id_posterior not in constantes.MOTORES_ATIVOS
-        if pode_ativar:
+        if pode_ativar and id not in constantes.MOTORES_ATIVOS:
             print(f'motor {id} ligado')
             constantes.MOTORES_ATIVOS.append(id)
-        else:
+        elif not pode_ativar:
             print(f'motor {id} nao pode ser ativo')
         constantes.mutex.release()
         return pode_ativar
@@ -31,9 +48,11 @@ def logica(id):
     for i in range(3):
         constantes.semaforo.acquire()
         print(f'Tenta ligar motor {id}')
+        tempo_funcionamento = time.time() + constantes.TEMPO_FUNCIONAMENTO
         while liga_desliga(id, True):
-            for i in range(100):
-                print(f'motor {id}: {i}\n')
-            break
+            if(time.time() > tempo_funcionamento):
+                break
+            time.sleep(1)
+            print(f'velocidade motor {id}: {velocidade_fn(i)}\n')
         liga_desliga(id,False)
         constantes.semaforo.release()

@@ -12,28 +12,31 @@ global B  # Atrito viscoso do motor
 global Om # Velocidade de rotacao do motor (saida)
 global Kb # Constante eletrica
 
-V   = 1
-Ra  = 1
-La  = 1
-Ia  = 1
-Km  = 1
-Tl  = 1
-Jm  = 1
-B   = 1
-Om  = 1
-Kb  = 1
+V   = 5
+Ra  = 500
+La  = 10
+Ia  = 0.023
+Km  = 5000
+Tl  = 10
+Jm  = 15
+B   = 53
+Om  = 81
+Kb  = 50
 
 # Variáveis compartilhadas
 global MAX_THREADS
 global NUM_MOTORES
 global MOTORES_ATIVOS
+global TEMPO_FUNCIONAMENTO
 global semaforo
 global mutex
 
 # MAX_THREADS = 12
 # NUM_MOTORES = 30
+# TEMPO_FUNCIONAMENTO = 60 # segundos
 MAX_THREADS = 3
-NUM_MOTORES = 5
+NUM_MOTORES = 8
+TEMPO_FUNCIONAMENTO = 5 # segundos
 MOTORES_ATIVOS = []
 semaforo = threading.Semaphore(value=MAX_THREADS)
 mutex = threading.Semaphore(value=1)
