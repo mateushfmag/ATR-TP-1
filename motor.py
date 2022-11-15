@@ -7,10 +7,10 @@ import time
 class Motor:
     def __init__(self, id):
         self.id = id
-
-    velocidade = 0
-    vel_desejada = 0
-    dT = 1
+        self.kill = False
+        self.velocidade = 0
+        self.vel_desejada = 0
+        self.dT = 1
 
 
     def define_velocidade_desejada(self):
@@ -56,10 +56,10 @@ class Motor:
         """
         Função responsável pela lógica executada pelo motor.
         """
-        while True:
+        while self.kill == False:
             constantes.semaforo.acquire()
             periodo = time.time() + constantes.PERIODO_MOTOR
-            while self.liga_desliga(True):
+            while self.liga_desliga(True) and self.kill == False:
                 if(time.time() > periodo):
                     periodo = time.time() + constantes.PERIODO_MOTOR
                     self.velocidade_fn()

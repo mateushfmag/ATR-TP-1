@@ -4,6 +4,7 @@ import constantes
 
 def logica(motores):
     periodo = time() + constantes.PERIODO_CONTROLADOR
+    tempo_funcionamento = time() + constantes.TEMPO_FUNCIONAMENTO
     while True:
         if (time() > periodo):
             periodo = time() + constantes.PERIODO_CONTROLADOR
@@ -13,4 +14,8 @@ def logica(motores):
             for motor in motores:
                 if motor.id in constantes.MOTORES_ATIVOS:
                     motor.liga_desliga(False)
+
+        if(time() > tempo_funcionamento):
+            for motor in motores:
+                motor.kill = True
 
