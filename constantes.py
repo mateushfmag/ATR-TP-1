@@ -30,13 +30,17 @@ global MOTORES_ATIVOS
 global TEMPO_FUNCIONAMENTO
 global semaforo
 global mutex
+global DIMINUI_VELOCIDADE
 
 # MAX_THREADS = 12
 # NUM_MOTORES = 30
 # TEMPO_FUNCIONAMENTO = 60 # segundos
-MAX_THREADS = 3
-NUM_MOTORES = 8
+PERIODO_MOTOR = 1
+PERIODO_CONTROLADOR = 0.2
+MAX_THREADS = 12
+NUM_MOTORES = 30
 TEMPO_FUNCIONAMENTO = 5 # segundos
 MOTORES_ATIVOS = []
 semaforo = threading.Semaphore(value=MAX_THREADS)
 mutex = threading.Semaphore(value=1)
+DIMINUI_VELOCIDADE = False

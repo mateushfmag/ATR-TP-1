@@ -15,6 +15,10 @@ def velocidade_fn(i):
     termo_3 = constantes.Km*constantes.Kb
     termo_4 = constantes.Ra*torque_motor_fn(i)
     velocidade = (termo_2 - termo_1 - termo_4)/termo_3
+
+    if constantes.DIMINUI_VELOCIDADE:
+        velocidade /= 2
+
     return velocidade
 
 def liga_desliga(id, liga):
@@ -48,11 +52,11 @@ def logica(id):
     for i in range(3):
         constantes.semaforo.acquire()
         print(f'Tenta ligar motor {id}')
-        tempo_funcionamento = time.time() + constantes.TEMPO_FUNCIONAMENTO
+        periodo = time.time() + constantes.PERIODO_MOTOR
         while liga_desliga(id, True):
-            if(time.time() > tempo_funcionamento):
-                break
+            if(time.time() > periodo):
+                periodo = time.time() + constantes.PERIODO_MOTOR
+                print(f'velocidade motor {id}: {velocidade_fn(i)}\n')
             time.sleep(1)
-            print(f'velocidade motor {id}: {velocidade_fn(i)}\n')
         liga_desliga(id,False)
         constantes.semaforo.release()
