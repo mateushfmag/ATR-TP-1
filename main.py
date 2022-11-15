@@ -3,6 +3,8 @@ import motor
 import constantes
 import controlador
 import logger
+import server
+from multiprocessing import Process
 
 
 if __name__ == '__main__':
@@ -22,6 +24,10 @@ if __name__ == '__main__':
 
         logger_thread = threading.Thread(target=logger.logica, args=[motores])
         logger_thread.start()
+
+        proc_scada = Process(target=server.synoptic_process)
+        proc_scada.start()
+        server.server()
 
     finally:
         logger_thread.join()
