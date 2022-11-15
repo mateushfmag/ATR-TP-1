@@ -5,30 +5,39 @@ import controlador
 import logger
 import server
 from multiprocessing import Process
+import atexit
 
+threads = []
 
 if __name__ == '__main__':
     # Disparando as Threads
-    try:
-        f = open("logger.txt", "w")
-        f.close()
+    f = open("logger.txt", "w")
+    f.close()
+    motores = []
+    for id in range(constantes.NUM_MOTORES):
+        motores.append(motor.Motor(id))
+        motor_thread = threading.Thread(target=motores[id].logica, args=[])
+        motor_thread.daemon = True
+        motor_thread.start()
+        threads.append(motor_thread)
 
-        motores = []
-        for id in range(constantes.NUM_MOTORES):
-            motores.append(motor.Motor(id))
-            motor_thread = threading.Thread(target=motores[id].logica, args=[])
-            motor_thread.start()
+    controle_thread = threading.Thread(target=controlador.logica, args=[motores])
+    controle_thread.daemon = True
+    controle_thread.start()
+    threads.append(controle_thread)
 
-        controle_thread = threading.Thread(target=controlador.logica, args=[motores])
-        controle_thread.start()
+    logger_thread = threading.Thread(target=logger.logica, args=[motores])
+    logger_thread.daemon = True
+    logger_thread.start()
+    threads.append(logger_thread)
 
-        logger_thread = threading.Thread(target=logger.logica, args=[motores])
-        logger_thread.start()
+    # proc_scada = Process(target=server.synoptic_process)
+    # proc_scada.start()
+    # server.server()
 
-        proc_scada = Process(target=server.synoptic_process)
-        proc_scada.start()
-        server.server()
 
-    finally:
-        logger_thread.join()
-        controle_thread.join()
+def exit_handler():
+    for thread in threads:
+        thread.join()
+
+atexit.register(exit_handler)
