@@ -1,4 +1,4 @@
-from time import time
+from time import time, sleep
 import constantes
 
 
@@ -8,4 +8,9 @@ def logica(motores):
         if (time() > periodo):
             periodo = time() + constantes.PERIODO_CONTROLADOR
             for motor in motores:
-                motor.velocidade /= 2
+                motor.vel_desejada /= 2
+            sleep(60)
+            for motor in motores:
+                if motor.id in constantes.MOTORES_ATIVOS:
+                    motor.liga_desliga(False)
+
