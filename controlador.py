@@ -2,11 +2,10 @@ from time import time
 import constantes
 
 
-def logica():
+def logica(motores):
     periodo = time() + constantes.PERIODO_CONTROLADOR
     while True:
-        constantes.DIMINUI_VELOCIDADE = False
         if (time() > periodo):
             periodo = time() + constantes.PERIODO_CONTROLADOR
-            constantes.DIMINUI_VELOCIDADE = True
-            
+            for motor in motores:
+                motor.velocidade /= 2
