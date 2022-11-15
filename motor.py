@@ -8,6 +8,7 @@ class Motor:
     def __init__(self, id):
         self.id = id
         self.kill = False
+        self.ativo = False
         self.velocidade = 0
         self.vel_desejada = 0
         self.dT = 1
@@ -15,6 +16,7 @@ class Motor:
 
     def define_velocidade_desejada(self):
         self.vel_desejada = int(input(f"Escolha a velocidade pro motor {self.id}: "))
+        return self.vel_desejada
 
 
     def torque_motor_fn(self, i):
@@ -37,7 +39,7 @@ class Motor:
             pode_ativar = id_anterior not in constantes.MOTORES_ATIVOS and id_posterior not in constantes.MOTORES_ATIVOS
             if pode_ativar and self.id not in constantes.MOTORES_ATIVOS:
                 print(f'motor {self.id} ligado')
-                self.define_velocidade_desejada()
+                self.ativo = True
                 constantes.MOTORES_ATIVOS.append(self.id)
             elif not pode_ativar:
                 print(f'motor {self.id} nao pode ser ativo')
@@ -48,6 +50,7 @@ class Motor:
             print(f'DESLIGA ID: {self.id} \n MOTORES ATIVOS: {constantes.MOTORES_ATIVOS}\n\n')
             if(self.id in constantes.MOTORES_ATIVOS):
                 constantes.MOTORES_ATIVOS.remove(self.id)
+                self.ativo = False
                 print(f'motor {self.id} desligado')
             constantes.mutex.release()
         return False

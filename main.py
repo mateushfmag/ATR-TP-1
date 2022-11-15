@@ -6,6 +6,7 @@ import logger
 import server
 from multiprocessing import Process
 import atexit
+import interface
 
 threads = []
 
@@ -30,6 +31,12 @@ if __name__ == '__main__':
     logger_thread.daemon = True
     logger_thread.start()
     threads.append(logger_thread)
+
+    interface_thread = threading.Thread(target=interface.logica, args=[motores])
+    interface_thread.daemon = True
+    interface_thread.start()
+    threads.append(interface_thread)
+
 
     # proc_scada = Process(target=server.synoptic_process)
     # proc_scada.start()
