@@ -56,8 +56,7 @@ class Motor:
         """
         Função responsável pela lógica executada pelo motor.
         """
-        # while True:
-        for i in range(3):
+        while True:
             constantes.semaforo.acquire()
             periodo = time.time() + constantes.PERIODO_MOTOR
             while self.liga_desliga(True):
