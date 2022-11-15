@@ -8,6 +8,7 @@ class Motor:
     def __init__(self, id):
         self.id = id
         self.kill = False
+        self.sem_velocidade_definida = True
         self.ativo = False
         self.velocidade = 0
         self.vel_desejada = 0
@@ -33,16 +34,16 @@ class Motor:
     def liga_desliga(self, liga):
         if liga:
             constantes.mutex.acquire()
-            print(f'LIGA ID: {self.id} \n MOTORES ATIVOS: {constantes.MOTORES_ATIVOS}\n\n')
+            # print(f'LIGA ID: {self.id} \n MOTORES ATIVOS: {constantes.MOTORES_ATIVOS}\n\n')
             id_posterior = self.id+1
             id_anterior = self.id-1
             pode_ativar = id_anterior not in constantes.MOTORES_ATIVOS and id_posterior not in constantes.MOTORES_ATIVOS
             if pode_ativar and self.id not in constantes.MOTORES_ATIVOS:
                 print(f'motor {self.id} ligado')
-                self.ativo = True
                 constantes.MOTORES_ATIVOS.append(self.id)
-            elif not pode_ativar:
-                print(f'motor {self.id} nao pode ser ativo')
+                self.ativo = True
+            # elif not pode_ativar:
+                # print(f'motor {self.id} nao pode ser ativo')
             constantes.mutex.release()
             return pode_ativar
         elif self.id in constantes.MOTORES_ATIVOS:
@@ -50,6 +51,7 @@ class Motor:
             print(f'DESLIGA ID: {self.id} \n MOTORES ATIVOS: {constantes.MOTORES_ATIVOS}\n\n')
             if(self.id in constantes.MOTORES_ATIVOS):
                 constantes.MOTORES_ATIVOS.remove(self.id)
+                self.sem_velocidade_definida = True
                 self.ativo = False
                 print(f'motor {self.id} desligado')
             constantes.mutex.release()
