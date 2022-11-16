@@ -40,6 +40,7 @@ class Motor:
             pode_ativar = id_anterior not in constantes.MOTORES_ATIVOS and id_posterior not in constantes.MOTORES_ATIVOS
             if pode_ativar and self.id not in constantes.MOTORES_ATIVOS:
                 print(f'motor {self.id} ligado')
+                self.kill = False
                 constantes.MOTORES_ATIVOS.append(self.id)
                 self.ativo = True
             # elif not pode_ativar:

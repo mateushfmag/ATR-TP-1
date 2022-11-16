@@ -22,7 +22,7 @@ def server():
     if(conn):
       connectionOnServer = conn
     while (response and connectionOnServer != None) :
-      if(response.decode('ascii') == 'q'):
+      if(response.decode('ascii') == 'x'):
         print('SISTEMA DESATIVADO')
         sys.exit()
       else:
@@ -38,8 +38,6 @@ def synoptic_process():
   HOST = socket.gethostbyname(socket.gethostname())
   PORT = 8000
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    f.write("h(t), Qin(t), Qout(t)")
-    f.write('\n')
     s.connect((HOST, PORT))
     th_read = threading.Thread(target=thread_read_ref, args=(s,))
     th_read.start()
